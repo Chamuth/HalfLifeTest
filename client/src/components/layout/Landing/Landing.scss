@@ -1,0 +1,81 @@
+@import "./../../../shared/styles/colors";
+
+.property {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: left;
+
+  .meta {
+    padding: 10px 15px;
+    display: flex;
+    flex-direction: column;
+
+    .property-title {
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+  }
+}
+
+.property {
+  cursor: pointer;
+  transition: transform 200ms, background-color 200ms, color 200ms;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+
+  &.active {
+    background-color: $primary;
+    color: white !important;
+  }
+}
+
+.rooms {
+  margin-top: 20px;
+
+  .room {
+    width: 100%;
+    display: flex;
+    cursor: pointer;
+    flex-direction: column;
+    transition: transform 200ms, background-color 200ms, color 200ms;
+
+    &:hover {
+      transform: scale(1.02);
+    }
+
+    &.active {
+      background-color: $primary;
+      color: white !important;
+    }
+
+    .meta {
+      padding: 10px 15px;
+      display: flex;
+      flex-direction: column;
+
+      .titles {
+        margin-bottom: 10px;
+      }
+
+      .right {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.logister {
+  margin-top: 50px;
+  margin-bottom: 100px;
+
+  button {
+    margin: 20px 10px;
+  }
+}
+
+.reservation-form {
+  padding: 0 300px !important;
+}

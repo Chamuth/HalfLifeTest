@@ -1,0 +1,16 @@
+@import "./../../../shared/styles/colors";
+
+.logo {
+  height: 64px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-container h5 {
+  font-size: 0.7em;
+  margin-left: 10px;
+  color: $primary;
+}
