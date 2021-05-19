@@ -1,12 +1,16 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import PropertyCard from "./components/propertyCard/PropertyCard";
-import RoomCard from "./components/propertyCard/RoomCard";
-import $ from "jquery";
+import PropertyCard from "./components/PropertyCard";
+import RoomCard from "./components/RoomCard";
+import ReserveForm from "./components/ReserveForm";
+
+import * as Scroll from "react-scroll";
 
 import { connect } from "react-redux";
 
 import "./Landing.scss";
+
+const scroll = Scroll.animateScroll;
 
 const Landing = ({ auth }) => {
   const [activeProperty, setActiveProperty] = useState("");
@@ -15,6 +19,10 @@ const Landing = ({ auth }) => {
   useEffect(
     () => {
       setActiveRoom("");
+
+      setTimeout(() => {
+        scroll.scrollToBottom();
+      }, 100);
     },
     [activeProperty]
   );
@@ -28,6 +36,10 @@ const Landing = ({ auth }) => {
       });
       window.M.FormSelect.init(document.querySelectorAll("select"));
       window.M.Timepicker.init(document.querySelectorAll(".timepicker"));
+
+      setTimeout(() => {
+        scroll.scrollToBottom();
+      }, 100);
     },
     [activeRoom]
   );
@@ -193,65 +205,20 @@ const Landing = ({ auth }) => {
           </div>
         )}
 
-        {activeRoom !== "" && auth && (
-          <div class="col s12 center-align logister">
-            <h4>
-              <strong>Make reservation</strong>
-            </h4>
+        {activeRoom !== "" &&
+          rooms.find((i) => i.id === activeRoom).available &&
+          auth && <ReserveForm />}
 
-            <br />
-
-            <form class="col s12 reservation-form">
-              <div class="row">
-                <div class="input-field col s12">
-                  <input
-                    value={auth.user.name}
-                    id="name"
-                    name="name"
-                    type="text"
-                    class="validate"
-                    disabled={true}
-                  />
-                  <label for="name">Customer Name</label>
-                </div>
-                <div class="input-field col s6">
-                  <input id="reserve-date" type="text" class="datepicker" />
-                  <label for="reserve-date">Reservation Date</label>
-                </div>
-                <div class="input-field col s6">
-                  <input id="reserve-time" type="text" class="timepicker" />
-                  <label for="reserve-time">Time of arrival</label>
-                </div>
-                <div class="input-field col s12">
-                  <select>
-                    <option value="" disabled selected>
-                      Select Reservation for
-                    </option>
-                    <option value="1">1 Night</option>
-                    <option value="2">2 Nights</option>
-                    <option value="3">3 Nights</option>
-                    <option value="4">4 Nights</option>
-                    <option value="5">5 Nights</option>
-                    <option value="6">6 Nights</option>
-                    <option value="7">7 Nights</option>
-                  </select>
-                  <label>Reservation Duration</label>
-                </div>
-                <div class="input-field col s12">
-                  <select>
-                    <option value="" disabled selected>
-                      Select Booking Type
-                    </option>
-                    <option value="1">Bed &amp; Breakfast</option>
-                    <option value="2">Half-board</option>
-                    <option value="3">Full-board</option>
-                  </select>
-                  <label>Booking Type</label>
-                </div>
-              </div>
-            </form>
-          </div>
-        )}
+        {activeRoom !== "" &&
+          !rooms.find((i) => i.id === activeRoom).available && (
+            <div
+              class="col s12 center-align"
+              style={{ marginTop: 50, marginBottom: 50 }}
+            >
+              <h4>Sorry, this room is already reserved</h4>
+              <h6>Please select another and retry</h6>
+            </div>
+          )}
       </div>
     </div>
   );

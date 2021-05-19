@@ -19,7 +19,13 @@ const RoomCard = ({ room, active }) => {
         {room.features.map((feature) => (
           <div className="prop">
             <span class="left">{feature.key}</span>
-            <span class={"right " + feature.color}>{feature.value}</span>
+            <span
+              class={
+                "right " + feature.value === "No" ? "red-text" : "green-text"
+              }
+            >
+              {feature.value}
+            </span>
           </div>
         ))}
       </div>
