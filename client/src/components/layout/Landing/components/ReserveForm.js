@@ -1,9 +1,14 @@
 import React, { useState, useRef } from "react";
 import { connect } from "react-redux";
-import { reserveRoom } from "../../../../actions/reserveActions";
+import {
+  reserveRoom,
+  calculatePrice,
+} from "../../../../actions/reserveActions";
 
 const ReserveForm = ({ roomid, auth, reserveRoom, errors }) => {
   const [specialNotes, setSpecialNotes] = useState(false);
+  const [cost, setCost] = useState("$..");
+  const [vat, setVat] = useState("$..");
 
   const userid = useRef(null);
   const name = useRef(null);
@@ -17,10 +22,8 @@ const ReserveForm = ({ roomid, auth, reserveRoom, errors }) => {
   const _specialNotes = useRef(null);
   const paymentMethod = useRef(null);
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-
-    var room = {
+  const roomData = () => {
+    return {
       roomid: roomid,
       id: userid.current.value,
       name: name.current.value,
@@ -34,8 +37,20 @@ const ReserveForm = ({ roomid, auth, reserveRoom, errors }) => {
       _specialNotes: _specialNotes.current ? _specialNotes.current.value : "",
       paymentMethod: paymentMethod.current.value,
     };
+  };
 
-    reserveRoom(room);
+  const onSubmit = (e) => {
+    e.preventDefault();
+    reserveRoom(roomData());
+  };
+
+  const onUpdate = (_) => {
+    calculatePrice(roomData()).then((val) => {
+      if (val) {
+        setCost(val.price);
+        setVat(val.vat);
+      }
+    });
   };
 
   return (
@@ -77,6 +92,7 @@ const ReserveForm = ({ roomid, auth, reserveRoom, errors }) => {
             <input
               id="reserve-date"
               ref={reserveDate}
+              onChange={onUpdate}
               type="text"
               name="reserveDate"
               required={true}
@@ -93,6 +109,7 @@ const ReserveForm = ({ roomid, auth, reserveRoom, errors }) => {
             <input
               name="reserveTime"
               ref={reserveTime}
+              onChange={onUpdate}
               id="reserve-time"
               type="text"
               class="timepicker"
@@ -103,6 +120,7 @@ const ReserveForm = ({ roomid, auth, reserveRoom, errors }) => {
             <select
               required={true}
               name="reserveDuration"
+              onChange={onUpdate}
               ref={reserveDuration}
             >
               <option value="" disabled selected>
@@ -124,7 +142,12 @@ const ReserveForm = ({ roomid, auth, reserveRoom, errors }) => {
             </span>
           )}
           <div class="input-field col s12" required={true}>
-            <select required={true} ref={reserveType} name="reserveType">
+            <select
+              required={true}
+              onChange={onUpdate}
+              ref={reserveType}
+              name="reserveType"
+            >
               <option value="" disabled selected>
                 Select Booking Type
               </option>
@@ -140,7 +163,12 @@ const ReserveForm = ({ roomid, auth, reserveRoom, errors }) => {
             )}
           </div>
           <div class="input-field col s12">
-            <select required={true} ref={guestCount} name="guestCount">
+            <select
+              required={true}
+              onChange={onUpdate}
+              ref={guestCount}
+              name="guestCount"
+            >
               <option value="" disabled selected>
                 Select Number of Guests
               </option>
@@ -165,6 +193,7 @@ const ReserveForm = ({ roomid, auth, reserveRoom, errors }) => {
               <input
                 name="reserveParking"
                 ref={reserveParking}
+                onChange={onUpdate}
                 required={true}
                 type="checkbox"
                 class="filled-in"
@@ -178,6 +207,7 @@ const ReserveForm = ({ roomid, auth, reserveRoom, errors }) => {
                 required={true}
                 ref={reserveRoomAmenities}
                 name="reserveRoomAmenities"
+                onChange={onUpdate}
                 type="checkbox"
                 class="filled-in"
               />
@@ -189,6 +219,7 @@ const ReserveForm = ({ roomid, auth, reserveRoom, errors }) => {
               <input
                 type="checkbox"
                 defaultValue={false}
+                onChange={onUpdate}
                 value={specialNotes}
                 onChange={(event) => {
                   setSpecialNotes(event.target.checked);
@@ -215,11 +246,13 @@ const ReserveForm = ({ roomid, auth, reserveRoom, errors }) => {
             class="input-field col s12"
             style={{ marginTop: specialNotes ? 0 : 25 }}
           >
-            <select ref={paymentMethod}>
-              <option value="" disabled selected>
+            <select ref={paymentMethod} onChange={onUpdate}>
+              <option value="" disabled>
                 Select Payment Method
               </option>
-              <option value="1">Credit Card Online</option>
+              <option selected value="1">
+                Credit Card Online
+              </option>
               <option value="2">Credit Card at Location</option>
               <option value="3">Cash at Location</option>
             </select>
@@ -243,11 +276,11 @@ const ReserveForm = ({ roomid, auth, reserveRoom, errors }) => {
           <div className="cost-estimation col s6">
             <div className="pair col s12">
               <span className="left">Reservation Cost</span>
-              <span className="right">$15.00</span>
+              <span className="right">{cost}</span>
             </div>
             <div className="pair col s12">
               <span className="left">Value Added Tax</span>
-              <span className="right">$4.99</span>
+              <span className="right">{vat}</span>
             </div>
           </div>
         </div>

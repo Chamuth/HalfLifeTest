@@ -63,5 +63,6 @@ module.exports = processReservation = (body) => {
     },
     paymentMethod: parseInt(body.paymentMethod),
     paid,
+    duration: parseInt(body.reserveDuration),
   };
 };

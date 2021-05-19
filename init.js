@@ -236,12 +236,12 @@ const rates = [
   },
   {
     guestCount: 3,
-    bookingType: 1,
+    bookingType: 2,
     price: 39.0,
   },
   {
     guestCount: 3,
-    bookingType: 1,
+    bookingType: 3,
     price: 45.0,
   },
 ];

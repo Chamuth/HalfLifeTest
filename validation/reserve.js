@@ -1,7 +1,8 @@
 const Validator = require("validator");
 const isEmpty = require("is-empty");
 
-module.exports = function validateReserveInput(data) {
+module.exports = function validateReserveInput(data, costonly) {
+  if (!costonly) costonly = false;
   let errors = {};
 
   // Convert empty fields to an empty string so we can use validator functions
@@ -44,7 +45,7 @@ module.exports = function validateReserveInput(data) {
     errors.guestCount = "Guest count must be given";
   }
 
-  if (!Validator.isInt(data.paymentMethod)) {
+  if (!Validator.isInt(data.paymentMethod) || costonly) {
     errors.paymentMethod = "A payment method must be selected to reserve";
   }
 

@@ -8,6 +8,7 @@ const processReservation = require("./../utils/reservationProcessor");
 const Property = require("../../models/Property");
 const Room = require("../../models/Room");
 const Reservation = require("../../models/Reservation");
+const Rate = require("../../models/Rate");
 
 router.get("/properties", (req, res) => {
   Property.find({})
@@ -61,9 +62,63 @@ router.post("/reserve", (req, res) => {
   }
 
   // create reservation
-  // var reservation = new Reservation();
+  var reservation = new Reservation(processReservation(req.body));
+  reservation.save().then((v) => {
+    console.log(v);
+  });
 
   res.send(JSON.stringify(processReservation(req.body)));
+});
+
+router.post("/cost", (req, res) => {
+  const { errors, isValid } = validateReserveInput(req.body, false);
+  let err = false;
+
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+
+  console.log(isValid);
+
+  if (isValid) {
+    var { guestCount, type, duration } = processReservation(req.body);
+
+    Rate.find({
+      guestCount,
+      bookingType: type,
+    }).then((rate) => {
+      if (rate) {
+        if (rate.length > 0) {
+          res.send(
+            JSON.stringify({
+              error: false,
+              cost: {
+                price: formatter.format(rate[0].price * duration),
+                vat: formatter.format(4.99),
+              },
+            })
+          );
+        } else {
+          err = true;
+        }
+      } else {
+        err = true;
+      }
+    });
+  }
+
+  if (err) {
+    res.send(
+      JSON.stringify({
+        error: true,
+        cost: {
+          price: "$...",
+          vat: "$...",
+        },
+      })
+    );
+  }
 });
 
 module.exports = router;

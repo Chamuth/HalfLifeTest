@@ -4,11 +4,8 @@ import { GET_ERRORS } from "./types";
 export const reserveRoom = (roomData) => (dispatch) => {
   axios
     .post("/api/manage/reserve", roomData)
-    .then((val) => {
-      console.log({
-        start: new Date(val.data.start).toLocaleString(),
-        end: new Date(val.data.end).toLocaleString(),
-      });
+    .then((_) => {
+      window.location = "/dashboard";
     })
     .catch((err) => {
       console.error(err);
@@ -17,4 +14,17 @@ export const reserveRoom = (roomData) => (dispatch) => {
         payload: err.response.data,
       });
     });
+};
+
+export const calculatePrice = (roomData) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post("/api/manage/cost", roomData)
+      .then((val) => {
+        resolve(val.data.cost);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
 };
