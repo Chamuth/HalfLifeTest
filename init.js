@@ -9,6 +9,7 @@ mongoose
 const Property = require("./models/Property");
 const Room = require("./models/Room");
 const User = require("./models/User");
+const Rate = require("./models/Rate");
 
 const properties = [
   {
@@ -197,28 +198,59 @@ const rooms = [
   },
 ];
 
-// populate initial data
-// properties.map((prop) => {
-//   new Property({
-//     id: prop.id,
-//     name: prop.title,
-//     description: prop.description,
-//   }).save();
-// });
-
-// rooms.map((room) => {
-//   new Room({
-//     id: room.id,
-//     propertyid: room.propertyid,
-//     image: room.image,
-//     features: room.features,
-//   }).save();
-// });
+const rates = [
+  {
+    guestCount: 1,
+    bookingType: 1,
+    price: 15.0,
+  },
+  {
+    guestCount: 1,
+    bookingType: 2,
+    price: 24.0,
+  },
+  {
+    guestCount: 1,
+    bookingType: 3,
+    price: 30.0,
+  },
+  {
+    guestCount: 2,
+    bookingType: 1,
+    price: 22.0,
+  },
+  {
+    guestCount: 2,
+    bookingType: 2,
+    price: 34.0,
+  },
+  {
+    guestCount: 2,
+    bookingType: 3,
+    price: 38.0,
+  },
+  {
+    guestCount: 3,
+    bookingType: 1,
+    price: 27.0,
+  },
+  {
+    guestCount: 3,
+    bookingType: 1,
+    price: 39.0,
+  },
+  {
+    guestCount: 3,
+    bookingType: 1,
+    price: 45.0,
+  },
+];
 
 const populate = async () => {
   console.log(await User.find({}));
   console.log(await Property.find({}));
   console.log(await Room.find({}));
+  console.log(await Rate.find({}));
   var state = 0;
 
   properties.forEach((prop) => {
@@ -267,8 +299,33 @@ const populate = async () => {
     });
   });
 
+  rates.forEach((rate) => {
+    console.log("Inserting/Updating Rate...");
+
+    var query = {
+        guestCount: rate.guestCount,
+        bookingType: rate.bookingType,
+      },
+      update = {
+        guestCount: rate.guestCount,
+        bookingType: rate.bookingType,
+        price: rate.price,
+      },
+      options = {
+        upsert: true,
+        new: true,
+        setDefaultsOnInsert: true,
+      };
+
+    Rate.findOneAndUpdate(query, update, options, (er, result) => {
+      if (er) console.error(er);
+      if (result) console.log("Successfully upserted Rates");
+      state++;
+    });
+  });
+
   var x = setInterval(() => {
-    if (state >= rooms.length + properties.length) {
+    if (state >= rooms.length + properties.length + rates.length) {
       clearInterval(x);
       process.exit();
     }

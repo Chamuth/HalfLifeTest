@@ -21,7 +21,7 @@ const RoomCard = ({ room, active }) => {
             <span class="left">{feature.key}</span>
             <span
               class={
-                "right " + feature.value === "No" ? "red-text" : "green-text"
+                "right " + (feature.value === "No" ? "red-text" : "green-text")
               }
             >
               {feature.value}

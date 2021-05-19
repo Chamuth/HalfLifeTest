@@ -72,10 +72,27 @@
   margin-bottom: 50px;
 
   button {
-    margin: 20px 10px;
+    margin: 10px 0px;
   }
 }
 
 .reservation-form {
   padding: 0 300px !important;
+}
+
+.cost-estimation {
+  margin-top: 10px;
+  margin-bottom: 50px;
+
+  .pair {
+    font-size: 1.2em;
+
+    .left {
+      font-weight: bold;
+      color: $primary;
+    }
+
+    .right {
+    }
+  }
 }

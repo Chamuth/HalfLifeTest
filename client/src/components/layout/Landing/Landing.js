@@ -207,7 +207,7 @@ const Landing = ({ auth }) => {
 
         {activeRoom !== "" &&
           rooms.find((i) => i.id === activeRoom).available &&
-          auth && <ReserveForm />}
+          auth && <ReserveForm roomid={activeRoom} />}
 
         {activeRoom !== "" &&
           !rooms.find((i) => i.id === activeRoom).available && (

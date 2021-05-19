@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 
 // Create Schema
 const ReservationSchema = new Schema({
+  userid: {
+    type: String,
+    required: true,
+  },
   name: {
     type: String,
     required: true,
@@ -26,10 +30,10 @@ const ReservationSchema = new Schema({
   services: {
     reserveParking: Boolean,
     roomAmenities: Boolean,
-    specialNote: String,
+    specialNotes: String,
   },
   paymentMethod: {
-    type: String,
+    type: Number,
     required: true,
   },
   paid: {
