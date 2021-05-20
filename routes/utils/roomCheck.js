@@ -13,8 +13,8 @@ module.exports = roomCheck = (roomid) => {
             reservation = reservations[i];
 
             if (
-              DateTime.now() > Date.parse(reservation.start) &&
-              DateTime.now() < Date.parse(reservation.end)
+              Date.now() > Date.parse(reservation.start) &&
+              Date.now() < Date.parse(reservation.end)
             ) {
               available = false;
               break;

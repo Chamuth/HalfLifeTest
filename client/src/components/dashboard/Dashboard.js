@@ -77,7 +77,11 @@ const Dashboard = ({ auth }) => {
       <div className="container" style={{ marginTop: 50 }}>
         <h4 style={{ display: "inline" }}>My Reservations</h4>
 
-        <a href="/" className="btn right primary rounded btn-large">
+        <a
+          href="/"
+          className="btn right primary waves-effect waves-light rounded btn-large"
+          style={{ fontWeight: "bold" }}
+        >
           <i className="material-icons left">add</i>
           Reserve Room
         </a>

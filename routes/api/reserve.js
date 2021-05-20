@@ -12,6 +12,11 @@ const Room = require("../../models/Room");
 const Reservation = require("../../models/Reservation");
 const Rate = require("../../models/Rate");
 
+const {
+  reservationCreatedEmail,
+  reservationCancelledEmail,
+} = require("./../services/emailService");
+
 router.get("/properties", (req, res) => {
   Property.find({})
     .then((val) => {
@@ -100,9 +105,12 @@ router.post("/reserve", (req, res) => {
 
   reservation.save().then((v) => {
     console.log(v);
+
+    // Reservation succesful, notify through email
+    reservationCreatedEmail(processed);
   });
 
-  res.send(JSON.stringify(processReservation(req.body)));
+  res.send(JSON.stringify(processed));
 });
 
 router.post("/cost", (req, res) => {
@@ -188,6 +196,9 @@ router.post("/cancel", (req, res) => {
             })
           );
         } else {
+          // send reservation cancelled email
+          reservationCancelledEmail(userid);
+
           res.send(
             JSON.stringify({
               error: false,

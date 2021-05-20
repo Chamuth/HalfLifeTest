@@ -51,13 +51,16 @@ const ReserveForm = ({ roomid, auth, reserveRoom, errors }) => {
   const onUpdate = (_) => {
     calculatePrice(roomData()).then((val) => {
       if (val) {
-        setCurrentAvailability(val.availability.available);
+        if (val.availability) {
+          setCurrentAvailability(val.availability.available);
+          setAvailableStart(new Date(val.availability.start));
+          setAvailableEnd(new Date(val.availability.end));
+        }
 
-        setAvailableStart(new Date(val.availability.start));
-        setAvailableEnd(new Date(val.availability.end));
-
-        setCost(val.cost.price);
-        setVat(val.cost.vat);
+        if (val.cost) {
+          setCost(val.cost.price);
+          setVat(val.cost.vat);
+        }
       }
     });
   };

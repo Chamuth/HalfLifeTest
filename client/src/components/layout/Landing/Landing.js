@@ -163,6 +163,21 @@ const Landing = ({ auth }) => {
           </div>
         )}
       </div>
+
+      {auth && (
+        <div className="center-align">
+          <h4>Hello {auth.user.name}</h4>
+          <h5>Check your reservations here</h5>
+          <a
+            href="/dashboard"
+            style={{ fontWeight: "bold", marginTop: 20, marginBottom: 100 }}
+            className="btn rounded btn-large primary waves-effect waves-light"
+          >
+            Reservations
+            <i className="material-icons right">chevron_right</i>
+          </a>
+        </div>
+      )}
     </div>
   );
 };
