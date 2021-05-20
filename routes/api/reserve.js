@@ -100,17 +100,18 @@ router.post("/reserve", (req, res) => {
   }
 
   // create reservation
-  var processed = processReservation(req.body);
-  var reservation = new Reservation(processed);
+  processReservation(req.body).then((processed) => {
+    var reservation = new Reservation(processed);
 
-  reservation.save().then((v) => {
-    console.log(v);
+    reservation.save().then((v) => {
+      console.log(v);
 
-    // Reservation succesful, notify through email
-    reservationCreatedEmail(processed);
+      // Reservation succesful, notify through email
+      reservationCreatedEmail(processed);
+    });
+
+    res.send(JSON.stringify(processed));
   });
-
-  res.send(JSON.stringify(processed));
 });
 
 router.post("/cost", (req, res) => {
@@ -123,43 +124,44 @@ router.post("/cost", (req, res) => {
   });
 
   if (isValid) {
-    var { guestCount, type, duration, start, end, roomid } = processReservation(
-      req.body
-    );
-    availabilityCheck(start, end, roomid).then((availability) => {
-      if (availability.available) {
-        Rate.find({
-          guestCount,
-          bookingType: type,
-        }).then((rate) => {
-          if (rate) {
-            if (rate.length > 0) {
-              res.send(
-                JSON.stringify({
-                  error: false,
-                  availability: availability,
-                  cost: {
-                    price: formatter.format(rate[0].price * duration),
-                    vat: formatter.format(4.99),
-                  },
-                })
-              );
-            } else {
-              err = true;
-            }
+    processReservation(req.body).then(
+      ({ guestCount, type, duration, start, end, roomid }) => {
+        availabilityCheck(start, end, roomid).then((availability) => {
+          if (availability.available) {
+            Rate.find({
+              guestCount,
+              bookingType: type,
+            }).then((rate) => {
+              if (rate) {
+                if (rate.length > 0) {
+                  res.send(
+                    JSON.stringify({
+                      error: false,
+                      availability: availability,
+                      cost: {
+                        price: formatter.format(rate[0].price * duration),
+                        vat: formatter.format(4.99),
+                      },
+                    })
+                  );
+                } else {
+                  err = true;
+                }
+              } else {
+                err = true;
+              }
+            });
           } else {
-            err = true;
+            res.send(
+              JSON.stringify({
+                error: true,
+                availability: availability,
+              })
+            );
           }
         });
-      } else {
-        res.send(
-          JSON.stringify({
-            error: true,
-            availability: availability,
-          })
-        );
       }
-    });
+    );
   }
 
   if (err) {
@@ -214,6 +216,40 @@ router.post("/cancel", (req, res) => {
         message: "Reservation ID or User ID not provided",
       })
     );
+  }
+});
+
+router.post("/cancelcost", (req, res) => {
+  var reservationid = req.body.reservationid;
+
+  if (reservationid) {
+    Reservation.findOne({ _id: reservationid }).then((doc) => {
+      if (!doc) {
+        res.send(
+          JSON.stringify({
+            error: true,
+          })
+        );
+      } else {
+        let hours = Math.floor(
+          (new Date(doc.start) - Date.now()) / 1000 / 60 / 60
+        );
+        let cost = 0;
+
+        // instructions not clear so, just 24 hours or less
+        if (hours < 24) {
+          // 20% of initial price
+          cost = (20 / 100) * doc.originalPrice;
+        }
+
+        res.send(
+          JSON.stringify({
+            error: false,
+            cost: cost,
+          })
+        );
+      }
+    });
   }
 });
 

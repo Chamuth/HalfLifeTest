@@ -18,24 +18,32 @@ module.exports = function availabilityCheck(start, end, roomid) {
 
   return new Promise((res, rej) => {
     Reservation.find({ roomid }).then((reservations) => {
-      reservations.forEach((reservation) => {
-        let rstart = new Date(reservation.start);
-        let rend = new Date(reservation.end);
+      if (reservations.length > 0) {
+        reservations.forEach((reservation) => {
+          let rstart = new Date(reservation.start);
+          let rend = new Date(reservation.end);
 
-        if (timeIntersectCheck(start, end, rstart, rend)) {
-          res({
-            available: false,
-            start: start,
-            end: end,
-          });
-        }
-      });
+          if (timeIntersectCheck(start, end, rstart, rend)) {
+            res({
+              available: false,
+              start: start,
+              end: end,
+            });
+          }
+        });
 
-      res({
-        available: true,
-        start: start,
-        end: end,
-      });
+        res({
+          available: true,
+          start: start,
+          end: end,
+        });
+      } else {
+        res({
+          available: true,
+          start: start,
+          end: end,
+        });
+      }
     });
   });
 };

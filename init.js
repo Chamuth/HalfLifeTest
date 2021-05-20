@@ -10,6 +10,7 @@ const Property = require("./models/Property");
 const Room = require("./models/Room");
 const User = require("./models/User");
 const Rate = require("./models/Rate");
+const Reservation = require("./models/Reservation");
 
 const properties = [
   {
@@ -252,6 +253,9 @@ const populate = async () => {
   console.log(await Room.find({}));
   console.log(await Rate.find({}));
   var state = 0;
+
+  // WARNING: clear all reservations
+  Reservation.remove({}, () => {});
 
   properties.forEach((prop) => {
     console.log("Inserting/Updating Property" + prop.id + "...");

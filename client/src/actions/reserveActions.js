@@ -94,3 +94,12 @@ export const cancelReservationAction = (reservationid, userid) => {
     });
   });
 };
+
+export const calculateCancellationCost = (reservationid) => {
+  return new Promise((res, rej) => {
+    axios.post("/api/manage/cancelcost", { reservationid }).then((val) => {
+      console.log(val);
+      res(val);
+    });
+  });
+};

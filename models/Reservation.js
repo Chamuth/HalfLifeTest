@@ -44,9 +44,9 @@ const ReservationSchema = new Schema({
     type: Boolean,
     required: true,
   },
-  cancellationFee: {
+  originalPrice: {
     type: Number,
-    required: false,
+    required: true,
   },
   cancelled: {
     type: Boolean,

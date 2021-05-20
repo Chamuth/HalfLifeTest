@@ -6,6 +6,7 @@ import ReservationCard from "./ReservationCard";
 import {
   retrieveReservations,
   cancelReservationAction,
+  calculateCancellationCost,
 } from "../../actions/reserveActions";
 import Footer from "./../footer/Footer";
 import "./Dashboard.scss";
@@ -23,6 +24,7 @@ const Dashboard = ({ auth }) => {
   const [reservations, setReservations] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const [cancelReservation, setCancelReservation] = useState(null);
+  const [cancellationCost, setCancellationCost] = useState(0);
 
   useEffect(() => {
     const { user } = auth;
@@ -43,8 +45,8 @@ const Dashboard = ({ auth }) => {
           specialNotes: entry.specialNotes,
           paymentMethod: entry.paymentMethod,
           paid: entry.paid,
+          originalPrice: entry.originalPrice || 0,
           cancelled: entry.cancelled || false,
-          cancellationFee: entry.cancelationFee || 0,
         }));
 
         setReservations(final);
@@ -52,6 +54,18 @@ const Dashboard = ({ auth }) => {
       }
     });
   }, []);
+
+  useEffect(
+    () => {
+      if (cancelReservation) {
+        // load cancellation price
+        calculateCancellationCost(cancelReservation.id).then((val) => {
+          setCancellationCost(val.data.cost);
+        });
+      }
+    },
+    [cancelReservation]
+  );
 
   const onCancel = (reservation_id) => {
     setCancelReservation(reservations.find((i) => i.id === reservation_id));
@@ -148,9 +162,15 @@ const Dashboard = ({ auth }) => {
                   <strong className="left">
                     Cancellation Fee (including all applicable Tax)
                   </strong>
-                  <span className="right">
-                    {formatter.format(cancelReservation.cancellationFee)}
-                  </span>
+                  {cancellationCost !== 0 && (
+                    <span className="right">
+                      {formatter.format(cancellationCost)}
+                    </span>
+                  )}
+
+                  {cancellationCost === 0 && (
+                    <span className="right">FREE</span>
+                  )}
                 </div>
               </div>
             )}
