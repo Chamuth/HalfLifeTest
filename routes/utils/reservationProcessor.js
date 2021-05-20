@@ -51,6 +51,7 @@ module.exports = processReservation = (body) => {
 
   return {
     userid: body.id,
+    roomid: body.roomid,
     name: body.name,
     start: reserve_start,
     end: reserve_end,

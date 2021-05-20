@@ -1,0 +1,33 @@
+.reservation {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow: hidden;
+
+  .room-img {
+    height: 100px;
+    width: 100px;
+    img {
+      height: 100px;
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .meta {
+    flex-grow: 1;
+    padding: 0 50px;
+
+    .col {
+      position: relative;
+    }
+  }
+
+  .actions {
+    padding: 15px 20px;
+  }
+
+  .paid-status {
+    padding: 15px 20px;
+  }
+}

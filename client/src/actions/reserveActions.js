@@ -1,6 +1,49 @@
 import axios from "axios";
 import { GET_ERRORS } from "./types";
 
+export const retrieveProperties = () => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/api/manage/properties`)
+      .then((val) => {
+        resolve(val.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
+export const retrieveRooms = (propertyid) => {
+  return new Promise((resolve, reject) => {
+    if (propertyid) {
+      axios
+        .get(`/api/manage/property/${propertyid}/rooms`)
+        .then((val) => {
+          resolve(val.data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    } else {
+      reject({});
+    }
+  });
+};
+
+export const retrieveReservations = (userid) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/api/manage/reservations/${userid}`)
+      .then((val) => {
+        resolve(val.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
 export const reserveRoom = (roomData) => (dispatch) => {
   axios
     .post("/api/manage/reserve", roomData)
@@ -21,7 +64,21 @@ export const calculatePrice = (roomData) => {
     axios
       .post("/api/manage/cost", roomData)
       .then((val) => {
-        resolve(val.data.cost);
+        console.log(val.data);
+        resolve(val.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
+export const checkRoom = (roomid) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/api/manage/room/${roomid}/availability`)
+      .then((val) => {
+        resolve(val.data.available);
       })
       .catch((err) => {
         reject(err);

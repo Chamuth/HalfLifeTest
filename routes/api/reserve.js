@@ -2,7 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const validateReserveInput = require("../../validation/reserve");
+const availabilityCheck = require("../../validation/availabilityCheck");
 const processReservation = require("./../utils/reservationProcessor");
+const roomCheck = require("./../utils/roomCheck");
 
 // Load models
 const Property = require("../../models/Property");
@@ -14,7 +16,7 @@ router.get("/properties", (req, res) => {
   Property.find({})
     .then((val) => {
       res.send(
-        JSON.stringifY({
+        JSON.stringify({
           error: false,
           value: val,
         })
@@ -22,7 +24,7 @@ router.get("/properties", (req, res) => {
     })
     .catch((err) => {
       res.send(
-        JSON.stringifY({
+        JSON.stringify({
           error: true,
           value: err,
         })
@@ -34,7 +36,7 @@ router.get("/property/:propid/rooms", (req, res) => {
   Room.find({ propertyid: req.params.propid })
     .then((val) => {
       res.send(
-        JSON.stringifY({
+        JSON.stringify({
           error: false,
           value: val,
         })
@@ -42,7 +44,7 @@ router.get("/property/:propid/rooms", (req, res) => {
     })
     .catch((err) => {
       res.send(
-        JSON.stringifY({
+        JSON.stringify({
           error: true,
           value: err,
         })
@@ -52,7 +54,38 @@ router.get("/property/:propid/rooms", (req, res) => {
 
 router.get("/property/:propid/availability", (req, res) => {});
 
-router.get("/room/:roomid/availability", (req, res) => {});
+router.get("/room/:roomid/availability", (req, res) => {
+  // availability at current time!
+  var roomid = req.params.roomid;
+  roomCheck(roomid).then((value) => {
+    res.send(
+      JSON.stringify({
+        available: value.available,
+      })
+    );
+  });
+});
+
+router.get("/reservations/:userid", (req, res) => {
+  Reservation.find({
+    userid: req.params.userid,
+  }).then((reservations) => {
+    if (reservations) {
+      res.send(
+        JSON.stringify({
+          error: false,
+          value: reservations,
+        })
+      );
+    } else {
+      res.send(
+        JSON.stringify({
+          error: true,
+        })
+      );
+    }
+  });
+});
 
 router.post("/reserve", (req, res) => {
   const { errors, isValid } = validateReserveInput(req.body);
@@ -62,7 +95,9 @@ router.post("/reserve", (req, res) => {
   }
 
   // create reservation
-  var reservation = new Reservation(processReservation(req.body));
+  var processed = processReservation(req.body);
+  var reservation = new Reservation(processed);
+
   reservation.save().then((v) => {
     console.log(v);
   });
@@ -79,31 +114,42 @@ router.post("/cost", (req, res) => {
     currency: "USD",
   });
 
-  console.log(isValid);
-
   if (isValid) {
-    var { guestCount, type, duration } = processReservation(req.body);
-
-    Rate.find({
-      guestCount,
-      bookingType: type,
-    }).then((rate) => {
-      if (rate) {
-        if (rate.length > 0) {
-          res.send(
-            JSON.stringify({
-              error: false,
-              cost: {
-                price: formatter.format(rate[0].price * duration),
-                vat: formatter.format(4.99),
-              },
-            })
-          );
-        } else {
-          err = true;
-        }
+    var { guestCount, type, duration, start, end, roomid } = processReservation(
+      req.body
+    );
+    availabilityCheck(start, end, roomid).then((availability) => {
+      if (availability.available) {
+        Rate.find({
+          guestCount,
+          bookingType: type,
+        }).then((rate) => {
+          if (rate) {
+            if (rate.length > 0) {
+              res.send(
+                JSON.stringify({
+                  error: false,
+                  availability: availability,
+                  cost: {
+                    price: formatter.format(rate[0].price * duration),
+                    vat: formatter.format(4.99),
+                  },
+                })
+              );
+            } else {
+              err = true;
+            }
+          } else {
+            err = true;
+          }
+        });
       } else {
-        err = true;
+        res.send(
+          JSON.stringify({
+            error: true,
+            availability: availability,
+          })
+        );
       }
     });
   }

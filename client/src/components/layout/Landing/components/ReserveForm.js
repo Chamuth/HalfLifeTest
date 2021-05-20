@@ -10,6 +10,10 @@ const ReserveForm = ({ roomid, auth, reserveRoom, errors }) => {
   const [cost, setCost] = useState("$..");
   const [vat, setVat] = useState("$..");
 
+  const [currentAvailability, setCurrentAvailability] = useState(null);
+  const [availableStart, setAvailableStart] = useState(null);
+  const [availableEnd, setAvailableEnd] = useState(null);
+
   const userid = useRef(null);
   const name = useRef(null);
   const reserveDate = useRef(null);
@@ -47,8 +51,13 @@ const ReserveForm = ({ roomid, auth, reserveRoom, errors }) => {
   const onUpdate = (_) => {
     calculatePrice(roomData()).then((val) => {
       if (val) {
-        setCost(val.price);
-        setVat(val.vat);
+        setCurrentAvailability(val.availability.available);
+
+        setAvailableStart(new Date(val.availability.start));
+        setAvailableEnd(new Date(val.availability.end));
+
+        setCost(val.cost.price);
+        setVat(val.cost.vat);
       }
     });
   };
@@ -116,6 +125,33 @@ const ReserveForm = ({ roomid, auth, reserveRoom, errors }) => {
             />
             <label for="reserve-time">Time of arrival (optional)</label>
           </div>
+
+          {currentAvailability === true && availableStart && availableEnd && (
+            <div className="col s12">
+              <div className="message green white-text">
+                <span className="material-icons">check</span>
+                <span>
+                  Room available between{" "}
+                  <strong>{availableStart.toLocaleString()}</strong> and{" "}
+                  <strong>{availableEnd.toLocaleString()}</strong>
+                </span>
+              </div>
+            </div>
+          )}
+
+          {currentAvailability === false && availableStart && availableEnd && (
+            <div className="col s12">
+              <div className="message red white-text">
+                <span className="material-icons">check</span>
+                <span>
+                  We're sorry this room is not available between{" "}
+                  <strong>{availableStart.toLocaleString()}</strong> and{" "}
+                  <strong>{availableEnd.toLocaleString()}</strong>
+                </span>
+              </div>
+            </div>
+          )}
+
           <div class="input-field col s12">
             <select
               required={true}
@@ -184,9 +220,7 @@ const ReserveForm = ({ roomid, auth, reserveRoom, errors }) => {
             )}
           </div>
           <div class="col s12 left-align" style={{ marginBottom: 15 }}>
-            <h7>
-              <strong>Additional Services</strong>
-            </h7>
+            <strong>Additional Services</strong>
           </div>
           <div class="col s12 left-align">
             <label>

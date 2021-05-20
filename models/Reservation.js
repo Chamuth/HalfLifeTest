@@ -7,6 +7,10 @@ const ReservationSchema = new Schema({
     type: String,
     required: true,
   },
+  roomid: {
+    type: String,
+    required: true,
+  },
   name: {
     type: String,
     required: true,
@@ -37,6 +41,14 @@ const ReservationSchema = new Schema({
     required: true,
   },
   paid: {
+    type: Boolean,
+    required: true,
+  },
+  cancellationFee: {
+    type: Number,
+    required: false,
+  },
+  cancelled: {
     type: Boolean,
     required: true,
   },

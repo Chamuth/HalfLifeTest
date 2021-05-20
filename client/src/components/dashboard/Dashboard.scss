@@ -1,0 +1,39 @@
+.reservations-container {
+  min-height: 50vh;
+}
+
+.empty-message {
+  padding: 50px;
+  text-align: center;
+
+  h4 {
+    color: #444;
+  }
+
+  h5 {
+    color: #999;
+  }
+}
+
+.cancellation-fee-container {
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #ccc;
+}
+
+.op {
+  opacity: 0;
+}
+
+.modal {
+  h5 {
+    margin-top: 0;
+  }
+}
+
+.modal-footer {
+  padding: 0 25px 25px 25px !important;
+}
+.modal-close {
+  width: 100%;
+}

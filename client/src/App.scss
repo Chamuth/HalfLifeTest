@@ -3,3 +3,33 @@
 .btn.primary {
   background-color: $primary;
 }
+
+.btn-small.primary {
+  background-color: $primary;
+
+  &:hover {
+    background-color: $primary;
+  }
+}
+
+.btn.rounded,
+.btn-small.rounded {
+  border-radius: 50px;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.fadeIn {
+  animation: fade 200ms;
+}
+
+.modal {
+  width: 500px;
+}

@@ -57,7 +57,7 @@ const rooms = [
     image:
       "http://cdn.home-designing.com/wp-content/uploads/2018/08/modern-platform-bedroom-sets.jpg",
     features: [
-      { key: "Floor area", value: "35", color: "green-text" },
+      { key: "Floor area", value: "35 m<sup>2</sup>", color: "green-text" },
       { key: "WiFi", value: "Yes", color: "green-text" },
       { key: "Sea View", value: "Yes", color: "green-text" },
       { key: "Lake View", value: "Yes", color: "green-text" },
@@ -73,7 +73,7 @@ const rooms = [
     image:
       "http://cdn.home-designing.com/wp-content/uploads/2018/08/modern-platform-bedroom-sets.jpg",
     features: [
-      { key: "Floor area", value: "35", color: "green-text" },
+      { key: "Floor area", value: "35 m<sup>2</sup>", color: "green-text" },
       { key: "WiFi", value: "Yes", color: "green-text" },
       { key: "Sea View", value: "Yes", color: "green-text" },
       { key: "Lake View", value: "Yes", color: "green-text" },
@@ -89,7 +89,7 @@ const rooms = [
     image:
       "http://cdn.home-designing.com/wp-content/uploads/2018/08/modern-platform-bedroom-sets.jpg",
     features: [
-      { key: "Floor area", value: "35", color: "green-text" },
+      { key: "Floor area", value: "35 m<sup>2</sup>", color: "green-text" },
       { key: "WiFi", value: "Yes", color: "green-text" },
       { key: "Sea View", value: "Yes", color: "green-text" },
       { key: "Lake View", value: "Yes", color: "green-text" },
@@ -106,7 +106,7 @@ const rooms = [
     image:
       "https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8YmVkcm9vbXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80",
     features: [
-      { key: "Floor area", value: "35", color: "green-text" },
+      { key: "Floor area", value: "35 m<sup>2</sup>", color: "green-text" },
       { key: "WiFi", value: "Yes", color: "green-text" },
       { key: "Sea View", value: "Yes", color: "green-text" },
       { key: "Lake View", value: "Yes", color: "green-text" },
@@ -122,7 +122,7 @@ const rooms = [
     image:
       "https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8YmVkcm9vbXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80",
     features: [
-      { key: "Floor area", value: "35", color: "green-text" },
+      { key: "Floor area", value: "35 m<sup>2</sup>", color: "green-text" },
       { key: "WiFi", value: "Yes", color: "green-text" },
       { key: "Sea View", value: "Yes", color: "green-text" },
       { key: "Lake View", value: "Yes", color: "green-text" },
@@ -138,7 +138,7 @@ const rooms = [
     image:
       "https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8YmVkcm9vbXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80",
     features: [
-      { key: "Floor area", value: "35", color: "green-text" },
+      { key: "Floor area", value: "35 m<sup>2</sup>", color: "green-text" },
       { key: "WiFi", value: "Yes", color: "green-text" },
       { key: "Sea View", value: "Yes", color: "green-text" },
       { key: "Lake View", value: "Yes", color: "green-text" },
@@ -155,7 +155,7 @@ const rooms = [
     image:
       "http://cdn.home-designing.com/wp-content/uploads/2018/10/Modern-Luxury-Bedroom-With-Black-Wall-And-Geometric-Painting.jpg",
     features: [
-      { key: "Floor area", value: "35", color: "green-text" },
+      { key: "Floor area", value: "35 m<sup>2</sup>", color: "green-text" },
       { key: "WiFi", value: "Yes", color: "green-text" },
       { key: "Sea View", value: "Yes", color: "green-text" },
       { key: "Lake View", value: "Yes", color: "green-text" },
@@ -171,7 +171,7 @@ const rooms = [
     image:
       "http://cdn.home-designing.com/wp-content/uploads/2018/10/Modern-Luxury-Bedroom-With-Black-Wall-And-Geometric-Painting.jpg",
     features: [
-      { key: "Floor area", value: "35", color: "green-text" },
+      { key: "Floor area", value: "35 m<sup>2</sup>", color: "green-text" },
       { key: "WiFi", value: "Yes", color: "green-text" },
       { key: "Sea View", value: "Yes", color: "green-text" },
       { key: "Lake View", value: "Yes", color: "green-text" },
@@ -187,7 +187,7 @@ const rooms = [
     image:
       "http://cdn.home-designing.com/wp-content/uploads/2018/10/Modern-Luxury-Bedroom-With-Black-Wall-And-Geometric-Painting.jpg",
     features: [
-      { key: "Floor area", value: "35", color: "green-text" },
+      { key: "Floor area", value: "35 m<sup>2</sup>", color: "green-text" },
       { key: "WiFi", value: "Yes", color: "green-text" },
       { key: "Sea View", value: "Yes", color: "green-text" },
       { key: "Lake View", value: "Yes", color: "green-text" },
