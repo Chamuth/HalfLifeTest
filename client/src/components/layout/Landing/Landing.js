@@ -129,14 +129,14 @@ const Landing = ({ auth }) => {
           </div>
         )}
 
-        {activeRoom !== "" && !auth && (
+        {activeRoom !== "" && !auth.isAuthenticated && (
           <div class="col s12 center-align logister">
             <h4>
               <strong>Sign in</strong> to reserve this room
             </h4>
             <h5>Manage reservations and more with a MangoHolidays account</h5>
 
-            <Link to="/login">
+            <Link to="/login" style={{ marginRight: 10 }}>
               <button className="btn blue waves-effect waves-dark">
                 SIGN IN
               </button>
@@ -149,9 +149,9 @@ const Landing = ({ auth }) => {
           </div>
         )}
 
-        {activeRoom !== "" && selectedRoomAvailability && auth && (
-          <ReserveForm roomid={activeRoom} />
-        )}
+        {activeRoom !== "" &&
+          selectedRoomAvailability &&
+          auth.isAuthenticated && <ReserveForm roomid={activeRoom} />}
 
         {activeRoom !== "" && !selectedRoomAvailability && (
           <div
@@ -164,7 +164,7 @@ const Landing = ({ auth }) => {
         )}
       </div>
 
-      {auth && (
+      {auth.isAuthenticated && (
         <div className="center-align">
           <h4>Hello {auth.user.name}</h4>
           <h5>Check your reservations here</h5>
