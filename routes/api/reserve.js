@@ -167,4 +167,43 @@ router.post("/cost", (req, res) => {
   }
 });
 
+router.post("/cancel", (req, res) => {
+  var reservationid = req.body.reservationid;
+  var userid = req.body.userid;
+
+  // consider they paid the cancellation fee
+  if (reservationid && userid) {
+    Reservation.findOneAndUpdate(
+      { _id: reservationid },
+      {
+        cancelled: true,
+      },
+      {},
+      (err, doc) => {
+        if (err) {
+          res.send(
+            JSON.stringify({
+              error: true,
+              err: err,
+            })
+          );
+        } else {
+          res.send(
+            JSON.stringify({
+              error: false,
+            })
+          );
+        }
+      }
+    );
+  } else {
+    return res.send(
+      JSON.stringifY({
+        error: true,
+        message: "Reservation ID or User ID not provided",
+      })
+    );
+  }
+});
+
 module.exports = router;

@@ -85,3 +85,12 @@ export const checkRoom = (roomid) => {
       });
   });
 };
+
+export const cancelReservationAction = (reservationid, userid) => {
+  return new Promise((resolve, reject) => {
+    axios.post("/api/manage/cancel", { reservationid, userid }).then((val) => {
+      console.log(val);
+      resolve(val);
+    });
+  });
+};

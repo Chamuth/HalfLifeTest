@@ -31,3 +31,8 @@
     padding: 15px 20px;
   }
 }
+
+.cancelled {
+  opacity: 0.5;
+  pointer-events: none;
+}

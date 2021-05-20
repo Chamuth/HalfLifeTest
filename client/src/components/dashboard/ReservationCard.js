@@ -12,7 +12,7 @@ import {
 
 const ReservationCard = ({ reservation, onCancel }) => {
   return (
-    <tr>
+    <tr className={reservation.cancelled ? "cancelled" : ""}>
       <td>{reservation.roomid}</td>
       <td>{dateParse(reservation.start)}</td>
       <td>{dateParse(reservation.end)}</td>
@@ -23,14 +23,23 @@ const ReservationCard = ({ reservation, onCancel }) => {
       <td>{emptyTest(reservation.specialNotes)}</td>
       <td>{PaymentMethod(reservation.paymentMethod)}</td>
       <td>{boolParse(reservation.paid)}</td>
-      <td>
-        <a
-          class="waves-effect rounded waves-dark btn-small red"
-          onClick={() => onCancel(reservation.id)}
-        >
-          Cancel Reservation
-        </a>
-      </td>
+      {reservation.cancelled && (
+        <td>
+          <a class="waves-effect disabled rounded waves-dark btn-small red">
+            Reservation Cancelled
+          </a>
+        </td>
+      )}
+      {!reservation.cancelled && (
+        <td>
+          <a
+            class="waves-effect rounded waves-dark btn-small red"
+            onClick={() => onCancel(reservation.id)}
+          >
+            Cancel Reservation
+          </a>
+        </td>
+      )}
     </tr>
   );
 };

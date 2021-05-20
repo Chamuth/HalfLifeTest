@@ -1,6 +1,10 @@
 const Validator = require("validator");
 const { PaymentMethod } = require("./enums");
 
+const processCancellationFee = () => {
+  return 5; // five dollars, have to implement this for dynamic stuff
+};
+
 module.exports = processReservation = (body) => {
   // 1300H to 1100H is a single night
 
@@ -65,5 +69,7 @@ module.exports = processReservation = (body) => {
     paymentMethod: parseInt(body.paymentMethod),
     paid,
     duration: parseInt(body.reserveDuration),
+    cancellationFee: processCancellationFee(),
+    cancelled: false,
   };
 };

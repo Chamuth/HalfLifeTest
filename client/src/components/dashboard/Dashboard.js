@@ -3,7 +3,10 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
 import ReservationCard from "./ReservationCard";
-import { retrieveReservations } from "../../actions/reserveActions";
+import {
+  retrieveReservations,
+  cancelReservationAction,
+} from "../../actions/reserveActions";
 import Footer from "./../footer/Footer";
 import "./Dashboard.scss";
 
@@ -40,6 +43,8 @@ const Dashboard = ({ auth }) => {
           specialNotes: entry.specialNotes,
           paymentMethod: entry.paymentMethod,
           paid: entry.paid,
+          cancelled: entry.cancelled || false,
+          cancellationFee: entry.cancelationFee || 0,
         }));
 
         setReservations(final);
@@ -54,10 +59,28 @@ const Dashboard = ({ auth }) => {
     window.M.Modal.init(elems, {}).open();
   };
 
+  const cancelReservationHandle = () => {
+    cancelReservationAction(cancelReservation.id, auth.user.id).then((val) => {
+      console.log(val);
+      // reload page
+      window.location.reload();
+    });
+  };
+
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+
   return (
     <React.Fragment>
       <div className="container" style={{ marginTop: 50 }}>
-        <h4>My Reservations</h4>
+        <h4 style={{ display: "inline" }}>My Reservations</h4>
+
+        <a href="/" className="btn right primary rounded btn-large">
+          <i className="material-icons left">add</i>
+          Reserve Room
+        </a>
 
         <div className="reservations-container" style={{ marginTop: 50 }}>
           {reservations.length > 0 && loaded && (
@@ -121,7 +144,9 @@ const Dashboard = ({ auth }) => {
                   <strong className="left">
                     Cancellation Fee (including all applicable Tax)
                   </strong>
-                  <span className="right">$20.00</span>
+                  <span className="right">
+                    {formatter.format(cancelReservation.cancellationFee)}
+                  </span>
                 </div>
               </div>
             )}
@@ -129,7 +154,11 @@ const Dashboard = ({ auth }) => {
               class="modal-footer center-align"
               style={{ textAlign: "center" }}
             >
-              <a href="#!" class="modal-close waves-effect waves-light btn red">
+              <a
+                href="#!"
+                onClick={cancelReservationHandle}
+                class="modal-close waves-effect waves-light btn red"
+              >
                 Proceed to Pay Cancellation Fee
                 <i class="material-icons right">send</i>
               </a>
